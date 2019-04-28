@@ -12,7 +12,9 @@
     "ejs": "~2.5.7",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
+    "iconv-lite": "^0.4.24",
     "morgan": "~1.9.0",
+    "node-powershell": "^4.0.0",
     "screenshot-desktop": "^1.7.0"
   }
 }
