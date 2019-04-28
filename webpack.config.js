@@ -15,9 +15,24 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.jsx$/,
+                test: /\.jsx?$/,
                 exclude: /node_modules/,
-                loader: 'babel-loader'
+                loader: 'babel-loader',
+                query: {
+                    babelrc: false,
+                    presets: [
+                        '@babel/preset-env',
+                        '@babel/preset-react'
+                    ],
+                    plugins: [
+                        ['@babel/plugin-proposal-decorators', {
+                            legacy: true
+                        }],
+                        ['@babel/plugin-proposal-class-properties', {
+                            loose: true
+                        }]
+                    ]
+                }
             }
         ]
     },

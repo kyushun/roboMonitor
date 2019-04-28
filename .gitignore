@@ -86,5 +86,8 @@ typings/
 # Build File
 public/js/*
 
+# Dev Profile
+jsconfig.json
+
 # Git Keep
 !.gitkeep
