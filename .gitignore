@@ -82,3 +82,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Build File
+public/js/*
+
+# Git Keep
+!.gitkeep

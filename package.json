@@ -3,7 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "watch": "webpack --progress --watch",
+    "dev-build": "webpack --mode development",
+    "prod-build": "webpack --mode production"
   },
   "dependencies": {
     "config": "^3.1.0",
@@ -15,6 +18,17 @@
     "iconv-lite": "^0.4.24",
     "morgan": "~1.9.0",
     "node-powershell": "^4.0.0",
+    "react": "^16.8.6",
+    "react-dom": "^16.8.6",
     "screenshot-desktop": "^1.7.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
+    "babel-loader": "^8.0.5",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }
