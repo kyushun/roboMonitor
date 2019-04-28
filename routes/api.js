@@ -1,8 +1,19 @@
 var express = require('express');
 var router = express.Router();
+const screenshot = require('screenshot-desktop');
 
-/* GET home page. */
-router.get('/ping', function(req, res, next) {
+
+/* API Router */
+router.get('/ss', function (req, res, next) {
+    screenshot().then((img) => {
+        res.type('jpeg').send(img);
+    }).catch((err) => {
+        res.send('error: ' + err.message);
+    })
+});
+
+
+router.get('/ping', function (req, res, next) {
     res.json({
         status: 'ok'
     });
