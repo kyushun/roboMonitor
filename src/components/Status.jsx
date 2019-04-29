@@ -7,6 +7,7 @@ import red from '@material-ui/core/colors/red';
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
 import { inject, observer } from 'mobx-react';
+import store from 'store';
 
 const styles = theme => ({
     statusCard: {
@@ -53,6 +54,11 @@ const styles = theme => ({
 class Status extends React.Component {
     componentDidMount() {
         this.fetchStatus();
+        if (store.get('settings').autoFetch) {
+            this.fetchInterval = setInterval(() => {
+                this.fetchStatus();
+            }, 5000);
+        }
     }
 
     fetchStatus = () => {

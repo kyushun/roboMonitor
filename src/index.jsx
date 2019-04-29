@@ -2,6 +2,7 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'mobx-react';
 
+import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -11,10 +12,9 @@ import ScreenShotCard from './components/ScreenShotCard';
 import ProgramList from './components/ProgramList';
 
 import MonitorStore from './stores/MonitorStore';
-import { theme } from './components/theme';
-
 const store = new MonitorStore();
 
+import { theme } from './components/theme';
 const styles = theme => ({
     mainContent: {
         margin: 'auto',
@@ -36,6 +36,7 @@ class App extends React.Component {
         return (
             <Provider store={store}>
                 <MuiThemeProvider theme={theme} >
+                    <CssBaseline />
                     <Header />
                     <Grid container className={classes.mainContent} spacing={24}>
                         <Grid item xs={12}>
