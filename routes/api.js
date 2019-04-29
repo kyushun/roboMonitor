@@ -6,15 +6,16 @@ const iconv = require('iconv-lite');
 const config = require('config');
 
 
-/* API Router */
+/* ScreenShot API */
 router.get('/ss', function (req, res, next) {
     screenshot().then((img) => {
         res.type('jpeg').send(img);
     }).catch((err) => {
-        res.send('error: ' + err.message);
+        res.status(500).send('error: ' + err.message);
     });
 });
 
+/* Robopat Status API */
 router.get('/robo/status', async function (req, res, next) {
     var cmd = await ps('Get-Process -Name ' + config.get('processName') + ' | Select-Object MainWindowTitle, StartTime | ForEach-Object {Write-Host $_.MainWindowTitle "," $_.StartTime}');
     
@@ -37,6 +38,27 @@ router.get('/robo/status', async function (req, res, next) {
             })
         });
     }
+});
+
+/* Robopat Start API */ 
+router.get('/robo/start/:id', async function (req, res, next) {
+    for(let i = 0; i < config.programs.length; i++) {
+        if  (req.params.id == config.programs[i].id) {
+            var cmd = await ps(config.programs[i].command);
+            if (cmd.output == null || cmd.err != null) {
+                res.status(500).json({
+                    status: 500,
+                    error: cmd.err
+                });
+            } else {
+                res.status(200).json({
+                    status: 200
+                });
+            }
+            return;
+        }
+    }
+    res.status(400).send("Wrong Params");
 });
 
 router.get('/ping', function (req, res, next) {
