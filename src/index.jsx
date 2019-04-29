@@ -6,6 +6,7 @@ import { MuiThemeProvider } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Header from './components/header';
+import Status from './components/Status';
 import ScreenShotCard from './components/ScreenShotCard';
 import ProgramList from './components/ProgramList';
 
@@ -36,11 +37,14 @@ class App extends React.Component {
             <Provider store={store}>
                 <MuiThemeProvider theme={theme} >
                     <Header />
-                    <Grid className={classes.mainContent} container spacing={24}>
-                        <Grid className={classes.mainContentGrid} item xs={12} md={6}>
+                    <Grid container className={classes.mainContent} spacing={24}>
+                        <Grid item xs={12}>
+                            <Status />
+                        </Grid>
+                        <Grid item className={classes.mainContentGrid} xs={12} md={6}>
                             <ScreenShotCard />
                         </Grid>
-                        <Grid className={classes.mainContentGrid} item xs={12} md={6}>
+                        <Grid item className={classes.mainContentGrid} xs={12} md={6}>
                             <ProgramList />
                         </Grid>
                     </Grid>

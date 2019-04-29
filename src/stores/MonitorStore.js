@@ -1,6 +1,15 @@
-import {observable, computed, action} from 'mobx';
+import { observable, computed, action } from 'mobx';
 
 export default class MonitorStore {
-    @observable isRoboRunning = false;
-    @observable programList = [];    
+    @observable runningProcess = [];
+    @observable programList = [];
+
+    @computed get isRunning() {
+        return (this.runningProcess != null && this.runningProcess.length > 0);
+    }
+
+    @action
+    setRoboStatus(runningName) {
+        this.runningProcess = runningName;
+    }
 }
