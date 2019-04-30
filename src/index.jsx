@@ -1,9 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'mobx-react';
+import { inject, observer } from 'mobx-react';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { MuiThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme } from '@material-ui/core/styles';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Header from './components/header';
@@ -11,10 +13,22 @@ import Status from './components/Status';
 import ScreenShotCard from './components/ScreenShotCard';
 import ProgramList from './components/ProgramList';
 
+import SettingsStore from './stores/SettingsStore';
 import MonitorStore from './stores/MonitorStore';
+const settings = new SettingsStore();
 const store = new MonitorStore();
 
-import { theme } from './components/theme';
+
+const theme = createMuiTheme({
+    palette: {
+        type: settings.isDarkTheme ? 'dark' : 'light'
+    },
+    typography: {
+        fontFamily: '"Noto Sans JP", sans-serif'
+    }
+});
+
+
 const styles = theme => ({
     mainContent: {
         margin: 'auto',
@@ -29,12 +43,18 @@ const styles = theme => ({
     }
 });
 
+@observer
 class App extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     render() {
         const { classes } = this.props;
 
         return (
-            <Provider store={store}>
+            <Provider settings={settings} store={store}>
                 <MuiThemeProvider theme={theme} >
                     <CssBaseline />
                     <Header />

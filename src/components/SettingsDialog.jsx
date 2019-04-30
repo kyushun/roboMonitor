@@ -29,28 +29,34 @@ const styles = {
     }
 };
 
-@inject('store')
+@inject('settings')
 @observer
 class SettingsDialog extends React.Component {
     constructor(props) {
         super(props);
-        this.state = this.props.store.settings;
+        this.state = {
+            isDarkTheme: this.props.settings.isDarkTheme,
+            autoFetch: this.props.settings.autoFetch
+        };
     }
 
     handleSave = () => {
-        this.props.store.setSettings({
-            isDarkTheme: this.state.isDarkTheme,
-            autoFetch: this.state.autoFetch
-        });
+        for (var s in this.state) {
+            let _state = this.state;
+            this.props.settings.set(s, eval(`_state.${s}`));
+        }
         this.handleClose();
-        location.reload();
     }
 
     handleClose = () => {
+        this.setState({
+            isDarkTheme: this.props.settings.isDarkTheme,
+            autoFetch: this.props.settings.autoFetch
+        });
         this.props.handleClose();
     }
 
-    handleChange = name => e => {
+    handleChange = (name, e) => {
         this.setState({ [name]: e.target.checked });
     };
 
@@ -73,7 +79,7 @@ class SettingsDialog extends React.Component {
                             <Switch
                                 checked={this.state.isDarkTheme}
                                 color="primary"
-                                onChange={this.handleChange('isDarkTheme')}
+                                onChange={this.handleChange.bind(this, 'isDarkTheme')}
                             />
                         </div>
                     </div>
@@ -83,7 +89,7 @@ class SettingsDialog extends React.Component {
                             <Switch
                                 checked={this.state.autoFetch}
                                 color="primary"
-                                onChange={this.handleChange('autoFetch')}
+                                onChange={this.handleChange.bind(this, 'autoFetch')}
                             />
                         </div>
                     </div>
