@@ -18,7 +18,7 @@ router.get('/ss', function (req, res, next) {
 /* Robopat Status API */
 router.get('/robo/status', async function (req, res, next) {
     var cmd = await ps('Get-Process -Name ' + config.get('processName') + ' | Select-Object MainWindowTitle, StartTime | ForEach-Object {Write-Host $_.MainWindowTitle "," $_.StartTime}');
-    
+
     if (cmd.output == null || cmd.err != null) {
         res.json({
             running: false,
@@ -40,10 +40,10 @@ router.get('/robo/status', async function (req, res, next) {
     }
 });
 
-/* Robopat Start API */ 
+/* Robopat Start API */
 router.get('/robo/start/:id', async function (req, res, next) {
-    for(let i = 0; i < config.programs.length; i++) {
-        if  (req.params.id == config.programs[i].id) {
+    for (let i = 0; i < config.programs.length; i++) {
+        if (req.params.id == config.programs[i].id) {
             var cmd = await ps(config.programs[i].command);
             if (cmd.output == null || cmd.err != null) {
                 res.status(500).json({
@@ -60,6 +60,41 @@ router.get('/robo/start/:id', async function (req, res, next) {
     }
     res.status(400).send("Wrong Params");
 });
+
+router.post('/robo/command', async function (req, res, next) {
+    var status = 200;
+    var response = '';
+    if (req.body.authKey != config.adminKey) {
+        status = 401;
+        response = 'ERROR: Unauthenticated Access.';
+    } else if (!req.body.command) {
+        status = 400;
+        response = 'ERROR: Invalid Parameters.';
+    }
+    console.log(req.body);
+    
+    const cmd = await ps(req.body.command);
+    if (cmd.output == null || cmd.err != null) {
+        status = 500;
+        response = cmd.err
+    } else {
+        response = cmd.output
+    }
+
+    res.status(status).json({
+        command: req.body.command,
+        response: response
+    });
+});
+
+router.post('/auth', function (req, res, next) {
+    if (req.body.key == config.adminKey) {
+        res.json({ authorized: true })
+    } else {
+        res.status(401).json({ authorized: false });
+    }
+});
+
 
 router.get('/ping', function (req, res, next) {
     res.json({

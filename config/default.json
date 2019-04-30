@@ -1,5 +1,6 @@
 {
     "processName": "notepad",
+    "adminKey": "0629",
     "programs": [
         {
             "id": "launchNotepad",

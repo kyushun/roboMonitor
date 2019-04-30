@@ -12,6 +12,7 @@ import Header from './components/header';
 import Status from './components/Status';
 import ScreenShotCard from './components/ScreenShotCard';
 import ProgramList from './components/ProgramList';
+import CommandCard from './components/CommandCard';
 
 import SettingsStore from './stores/SettingsStore';
 import MonitorStore from './stores/MonitorStore';
@@ -54,7 +55,7 @@ class App extends React.Component {
         const { classes } = this.props;
 
         return (
-            <Provider settings={settings} store={store}>
+            <Provider settings={this.props.settings} store={this.props.store}>
                 <MuiThemeProvider theme={theme} >
                     <CssBaseline />
                     <Header />
@@ -67,6 +68,13 @@ class App extends React.Component {
                         </Grid>
                         <Grid item className={classes.mainContentGrid} xs={12} md={6}>
                             <ProgramList />
+                            {(() => {
+                                if (this.props.settings.authorized) {
+                                    return (
+                                        <CommandCard />
+                                    );
+                                }
+                            })()}
                         </Grid>
                     </Grid>
                 </MuiThemeProvider>
@@ -75,4 +83,4 @@ class App extends React.Component {
     }
 }
 const _App = withStyles(styles)(App);
-render(<_App />, document.getElementById('app'));
+render(<_App settings={settings} store={store} />, document.getElementById('app'));

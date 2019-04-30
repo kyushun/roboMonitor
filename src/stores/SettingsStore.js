@@ -1,25 +1,27 @@
 import { observable, computed, action } from 'mobx';
+import axios from 'axios';
 import store from 'store';
-
-const defaultSettings = {
-    isDarkTheme: false,
-    autoFetch: true,
-    authorized: false
-};
 
 const STORE_KEY = 'settings';
 
 export default class SettingsStore {
     @observable isDarkTheme = false;
     @observable autoFetch = true;
+    @observable authKey = null;
     @observable authorized = false;
 
     constructor() {
         const _store = store.get(STORE_KEY);
         if (_store) {
             Object.keys(_store).forEach(function (key) {
-                eval(`this.${key} = ${_store[key]}`);
+                const v = typeof (_store[key]) == 'string' ? `"${_store[key]}"` : _store[key];
+                eval(`this.${key} = ${v}`);
             }, this);
+        }
+        if (this.authKey) {
+            axios.post('/api/auth', { key: this.authKey })
+                .then(result => { this.authorized = true; })
+                .catch(err => { this.authorized = false; });
         }
     }
 
@@ -33,7 +35,7 @@ export default class SettingsStore {
         const _s = store.get(STORE_KEY) ? store.get(STORE_KEY) : {};
         _s[key] = value;
         store.set(STORE_KEY, _s);
-        eval(`this.${key} = ${value}`);
-        location.reload();
+        const _v = typeof (value) == 'string' ? `"${value}"` : value;
+        eval(`this.${key} = ${_v}`);
     }
 }
