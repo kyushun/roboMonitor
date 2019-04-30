@@ -1,12 +1,13 @@
 {
     "processName": "notepad",
     "adminKey": "0629",
-    "programs": [        
+    "programs": [
         {
             "id": "restart",
             "name": "再起動",
             "command": "shutdown -r -f -t 10 -c \"シャットダウンコマンドが実行されました。間もなく再起動します。\"",
-            "descript": "PCを再起動します。\r\n強制的にすべてのプログラムを終了させるので実行中のプログラムがないか確認してください。"
+            "descript": "PCを再起動します。\r\n強制的にすべてのプログラムを終了させるので実行中のプログラムがないか確認してください。",
+            "allowForceExec": true
         },
         {
             "id": "launchNotepad",

@@ -135,7 +135,7 @@ class ProgramExecDialog extends React.Component {
                     <Button onClick={this.props.handleClose} color="primary">
                         キャンセル
                     </Button>
-                    <Button onClick={this.handleExec} color="primary" autoFocus disabled={this.state.loading || !this.props.executable}>
+                    <Button onClick={this.handleExec} color="primary" autoFocus disabled={!rbMonitor.programs[Number(this.props.idx)].allowForceExec && (this.state.loading || !this.props.executable)}>
                         実行
                     </Button>
                 </DialogActions>
