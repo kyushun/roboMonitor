@@ -5,6 +5,10 @@ const Shell = require('node-powershell');
 const iconv = require('iconv-lite');
 const config = require('config');
 
+const PS_REFRESH_COUNT = 50;
+var powerShell;
+var psCallCount = 0;
+psInit();
 
 /* ScreenShot API */
 router.get('/ss', function (req, res, next) {
@@ -71,8 +75,7 @@ router.post('/robo/command', async function (req, res, next) {
         status = 400;
         response = 'ERROR: Invalid Parameters.';
     }
-    console.log(req.body);
-    
+
     const cmd = await ps(req.body.command);
     if (cmd.output == null || cmd.err != null) {
         status = 500;
@@ -102,22 +105,24 @@ router.get('/ping', function (req, res, next) {
     });
 });
 
-
-async function ps(cmd) {
-    const ps = new Shell({
+function psInit() {
+    powerShell = new Shell({
         executionPolicy: 'Bypass',
         noProfile: true,
         outputEncoding: 'binary'
     });
-
     // SJIS     932
     // UTF8     65001
-    ps.addCommand('chcp 65001 | Out-Null');
+    powerShell.addCommand('chcp 65001 | Out-Null');
+    console.log('PowerShell Initialized.');
+}
+
+async function ps(cmd) {
     if (typeof cmd === "string") {
-        ps.addCommand(cmd);
+        powerShell.addCommand(cmd);
     } else if (Array.isArray(cmd)) {
         cmd.forEach(_cmd => {
-            ps.addCommand(_cmd);
+            powerShell.addCommand(_cmd);
         });
     }
 
@@ -126,13 +131,19 @@ async function ps(cmd) {
         err: null
     };
 
-    await ps.invoke()
+    await powerShell.invoke()
         .then(output => {
             res.output = iconv.decode(output, "utf-8");
         })
         .catch(err => {
             res.err = iconv.decode(err.message, "utf-8");
         });
+    psCallCount++;
+    if (psCallCount > PS_REFRESH_COUNT) {
+        powerShell.dispose();
+        psInit();
+        psCallCount = 0;
+    }
     return res;
 }
 
