@@ -64,9 +64,7 @@ class ProgramList extends React.Component {
         return (
             <Card style={{ boxShadow: 'none', border: 'solid 1px rgba(0, 0, 0, 0.12)' }}>
                 <CardContent>
-                    <Typography variant="h5" component="h2">
-                        タスクを実行
-                    </Typography>
+                    <Typography style={{ fontWeight: '700' }} variant="h6" component="h2">タスクを実行</Typography>
                     <Typography color="textSecondary">
                         プログラムを指定すると今すぐにタスクが実行されます
                     </Typography>

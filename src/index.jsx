@@ -25,7 +25,19 @@ const theme = createMuiTheme({
         type: settings.isDarkTheme ? 'dark' : 'light'
     },
     typography: {
-        fontFamily: '"Noto Sans JP", sans-serif'
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Helvetica Neue"',
+            '"Noto Sans JP"',
+            'YuGothic',
+            '"ヒラギノ角ゴ ProN W3"',
+            'Hiragino Kaku Gothic ProN',
+            'Arial',
+            '"メイリオ"',
+            'Meiryo',
+            'sans-serif',
+        ].join(',')
     }
 });
 

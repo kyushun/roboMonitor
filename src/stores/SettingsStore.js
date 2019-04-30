@@ -7,6 +7,8 @@ const STORE_KEY = 'settings';
 export default class SettingsStore {
     @observable isDarkTheme = false;
     @observable autoFetch = true;
+    @observable ssFetchInterval = 5000;
+    @observable statusFetchInterval = 2000;
     @observable authKey = null;
     @observable authorized = false;
 
@@ -28,6 +30,7 @@ export default class SettingsStore {
     @action
     reset() {
         store.remove(STORE_KEY);
+        location.reload();
     }
 
     @action

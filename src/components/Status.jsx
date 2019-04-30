@@ -56,7 +56,7 @@ class Status extends React.Component {
         if (this.props.settings.autoFetch) {
             this.fetchInterval = setInterval(() => {
                 this.fetchStatus();
-            }, 5000);
+            }, this.props.settings.statusFetchInterval);
         }
     }
 

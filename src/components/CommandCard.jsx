@@ -30,7 +30,8 @@ const styles = {
         WebkitOverflowScrolling: 'touch'
     },
     outputText: {
-        color: '#fff'
+        color: '#fff',
+        whiteSpace: 'nowrap'
     }
 };
 

@@ -20,7 +20,7 @@ class ScreenShotCard extends React.Component {
         if (this.props.settings.autoFetch) {
             this.fetchInterval = setInterval(() => {
                 this.fetchSS();
-            }, 1000);
+            }, this.props.settings.ssFetchInterval);
         }
     }
 

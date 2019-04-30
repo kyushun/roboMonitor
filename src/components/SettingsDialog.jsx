@@ -39,6 +39,8 @@ class SettingsDialog extends React.Component {
         this.state = {
             isDarkTheme: this.props.settings.isDarkTheme,
             autoFetch: this.props.settings.autoFetch,
+            ssFetchInterval: this.props.settings.ssFetchInterval,
+            statusFetchInterval: this.props.settings.statusFetchInterval,
             authKey: this.props.settings.authKey
         };
     }
@@ -56,7 +58,10 @@ class SettingsDialog extends React.Component {
     handleClose = () => {
         this.setState({
             isDarkTheme: this.props.settings.isDarkTheme,
-            autoFetch: this.props.settings.autoFetch
+            autoFetch: this.props.settings.autoFetch,
+            ssFetchInterval: this.props.settings.ssFetchInterval,
+            statusFetchInterval: this.props.settings.statusFetchInterval,
+            authKey: this.props.settings.authKey
         });
         this.props.handleClose();
     }
@@ -65,7 +70,7 @@ class SettingsDialog extends React.Component {
         this.setState({ [name]: e.target.checked });
     };
 
-    handleTextChange = (name, e) => {
+    handleValueChange = (name, e) => {
         this.setState({ [name]: e.target.value });
     }
 
@@ -112,7 +117,7 @@ class SettingsDialog extends React.Component {
                                 margin="normal"
                                 variant="outlined"
                                 value={this.state.authKey}
-                                onChange={this.handleTextChange.bind(this, 'authKey')}
+                                onChange={this.handleValueChange.bind(this, 'authKey')}
                             />
                         </div>
                     </div>
@@ -125,7 +130,6 @@ class SettingsDialog extends React.Component {
                                         <div className={classes.sectionSummary}><Typography>SS取得間隔 (ms)</Typography></div>
                                         <div className={classes.sectionForm}>
                                             <TextField
-                                                id="outlined-number"
                                                 label="Number"
                                                 type="number"
                                                 InputLabelProps={{
@@ -133,6 +137,24 @@ class SettingsDialog extends React.Component {
                                                 }}
                                                 margin="normal"
                                                 variant="outlined"
+                                                value={this.state.ssFetchInterval}
+                                                onChange={this.handleValueChange.bind(this, 'ssFetchInterval')}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={classes.section}>
+                                        <div className={classes.sectionSummary}><Typography>ステータス取得間隔 (ms)</Typography></div>
+                                        <div className={classes.sectionForm}>
+                                            <TextField
+                                                label="Number"
+                                                type="number"
+                                                InputLabelProps={{
+                                                    shrink: true,
+                                                }}
+                                                margin="normal"
+                                                variant="outlined"
+                                                value={this.state.statusFetchInterval}
+                                                onChange={this.handleValueChange.bind(this, 'statusFetchInterval')}
                                             />
                                         </div>
                                     </div>
@@ -142,11 +164,14 @@ class SettingsDialog extends React.Component {
                     })()}
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={this.handleSave} color="secondary" autoFocus>
-                        Save
+                    <Button color="secondary" style={{marginRight: 'auto'}} onClick={e => {this.props.settings.reset()}}>
+                        設定をリセット
+                    </Button>
+                    <Button onClick={this.handleSave} color="primary" autoFocus>
+                        保存
                     </Button>
                     <Button onClick={this.handleClose} color="primary">
-                        Close
+                        キャンセル
                     </Button>
                 </DialogActions>
             </Dialog>
