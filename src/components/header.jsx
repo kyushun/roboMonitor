@@ -33,7 +33,7 @@ class Header extends React.Component {
                     <Toolbar>
                         <Typography variant="h6" color="inherit" style={{ flexGrow: '1' }}>
                             Robopat Monitor
-                    </Typography>
+                        </Typography>
                         <IconButton
                             color="inherit"
                             onClick={this.handleSettingsOpen}

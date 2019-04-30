@@ -31,6 +31,14 @@ export default class SettingsStore {
     }
 
     @action
+    setAll(obj) {
+        Object.keys(obj).forEach((key) => {
+            this.set(key, obj[key]);
+        });
+        location.reload();
+    }
+
+    @action
     set(key, value) {
         const _s = store.get(STORE_KEY) ? store.get(STORE_KEY) : {};
         _s[key] = value;

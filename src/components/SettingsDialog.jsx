@@ -44,10 +44,12 @@ class SettingsDialog extends React.Component {
     }
 
     handleSave = () => {
+        var _obj = {};
         for (var s in this.state) {
             let _state = this.state;
-            this.props.settings.set(s, eval(`_state.${s}`));
+            _obj[s] = eval(`_state.${s}`);
         }
+        this.props.settings.setAll(_obj);
         this.handleClose();
     }
 

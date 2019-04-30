@@ -45,6 +45,7 @@ class CommandCard extends React.Component {
             output: '',
             executable: true
         };
+        this.outputRef = React.createRef();
     }
 
     handleChange = (e) => {
@@ -71,12 +72,14 @@ class CommandCard extends React.Component {
                     output: this.state.output + result.data.response,
                     executable: true
                 });
+                this.outputRef.current.scrollTop = this.outputRef.current.scrollHeight;
             })
             .catch(err => {
                 this.setState({
                     output: this.state.output + err.response.data.response,
                     executable: true
                 });
+                this.outputRef.current.scrollTop = this.outputRef.current.scrollHeight;
             });
     }
 
@@ -106,10 +109,10 @@ class CommandCard extends React.Component {
                             </Button>
                         </Grid>
                     </Grid>
-                    <div className={classes.output}>
+                    <div className={classes.output} ref={this.outputRef}>
                         <code>
-                            {this.state.output.split(/\n|\r\n|\r/).map(m => {
-                                return <Typography className={classes.outputText} key={m}>{m}<br /></Typography>
+                            {this.state.output.split(/\n|\r\n|\r/).map((m, idx) => {
+                                return <Typography className={classes.outputText} key={m + idx}>{m}<br /></Typography>
                             })}
                         </code>
                     </div>

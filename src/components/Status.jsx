@@ -6,6 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import red from '@material-ui/core/colors/red';
 import green from '@material-ui/core/colors/green';
 import grey from '@material-ui/core/colors/grey';
+import Typography from '@material-ui/core/Typography';
 import { inject, observer } from 'mobx-react';
 
 const styles = theme => ({
@@ -31,7 +32,6 @@ const styles = theme => ({
     },
     statusSummary: {
         position: 'relative',
-        color: '#333',
         fontSize: '1.5rem',
         fontWeight: '900'
     },
@@ -73,7 +73,7 @@ class Status extends React.Component {
         if (this.props.store.isRunning) {
             return (
                 <div>
-                    <div className={classes.statusSummary}>使用中</div>
+                    <Typography className={classes.statusSummary}>使用中</Typography>
                     <div className={classes.statusDetail}>
                         {this.props.store.runningProcess.map(p => (
                             <div className={classes.statusDetailItem} key={p.startTime}>{(() => {
@@ -85,7 +85,7 @@ class Status extends React.Component {
                 </div>
             );
         } else {
-            return <div className={classes.statusSummary}>使用可能</div>
+            return <Typography className={classes.statusSummary}>使用可能</Typography>
         }
     }
 }

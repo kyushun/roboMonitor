@@ -63,10 +63,10 @@ class App extends React.Component {
                         <Grid item xs={12}>
                             <Status />
                         </Grid>
-                        <Grid item className={classes.mainContentGrid} xs={12} md={6}>
+                        <Grid item className={classes.mainContentGrid} xs={12} md={8}>
                             <ScreenShotCard />
                         </Grid>
-                        <Grid item className={classes.mainContentGrid} xs={12} md={6}>
+                        <Grid item className={classes.mainContentGrid} xs={12} md={4}>
                             <ProgramList />
                             {(() => {
                                 if (this.props.settings.authorized) {
