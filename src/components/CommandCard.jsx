@@ -61,7 +61,7 @@ class CommandCard extends React.Component {
 
     postCommand = (cmd) => {
         this.setState({
-            output: this.state.output + '\r\n> ' + cmd,
+            output: this.state.output + '\r\n> ' + cmd + '\r\n',
             executable: false
         });
         axios.post('/api/robo/command', {
@@ -111,11 +111,17 @@ class CommandCard extends React.Component {
                         </Grid>
                     </Grid>
                     <div className={classes.output} ref={this.outputRef}>
-                        <code>
-                            {this.state.output.split(/\n|\r\n|\r/).map((m, idx) => {
-                                return <Typography className={classes.outputText} key={m + idx}>{m}<br /></Typography>
-                            })}
-                        </code>
+                        {(() => {
+                            if (this.state.output) {
+                                return (
+                                    <code>
+                                        {this.state.output.split(/\n|\r\n|\r/).map((m, idx) => {
+                                            return <Typography className={classes.outputText} key={m + idx}>{m}<br /></Typography>
+                                        })}
+                                    </code>
+                                );
+                            }
+                        })()}
                     </div>
                 </CardContent>
             </Card>
