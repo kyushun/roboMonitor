@@ -3,6 +3,7 @@ var router = express.Router();
 const screenshot = require('screenshot-desktop');
 const config = require('config');
 const exec = require('child_process').exec;
+const Encoding = require('encoding-japanese');
 
 /* ScreenShot API */
 router.get('/ss', function (req, res, next) {
@@ -55,7 +56,7 @@ router.get('/robo/start/:id', async function (req, res, next) {
             }).catch((err, stderr) => {
                 res.status(500).json({
                     status: 500,
-                    error: cmd.err
+                    error: err.message || stderr
                 });
             });
     } else {
@@ -88,31 +89,6 @@ router.post('/robo/command', async function (req, res, next) {
     });
 });
 
-router.post('/robo/command', async function (req, res, next) {
-    var status = 200;
-    var response = '';
-    if (req.body.authKey != config.adminKey) {
-        status = 401;
-        response = 'ERROR: Unauthenticated Access.';
-    } else if (!req.body.command) {
-        status = 400;
-        response = 'ERROR: Invalid Parameters.';
-    }
-
-    const cmd = await ps(req.body.command);
-    if (cmd.output == null || cmd.err != null) {
-        status = 500;
-        response = cmd.err
-    } else {
-        response = cmd.output
-    }
-
-    res.status(status).json({
-        command: req.body.command,
-        response: response
-    });
-});
-
 router.post('/auth', function (req, res, next) {
     if (req.body.key == config.adminKey) {
         res.json({ authorized: true })
@@ -130,16 +106,23 @@ router.get('/ping', function (req, res, next) {
 
 const execEx = (command) => {
     return new Promise((resolve, reject) => {
-        exec(command, (err, stdout, stderr) => {
+        exec(command, { encoding: 'Shift_JIS' }, (err, stdout, stderr) => {
             if (err) {
                 reject(err.message);
-            } else if (stderr) {
-                reject(stderr);
+            } else if (toString(stderr)) {
+                reject(toString(stderr));
             } else {
-                resolve(stdout);
+                resolve(toString(stdout));
             }
         });
-    });
+    });    
 }
+
+const toString = (bytes) => {
+    return Encoding.convert(bytes, {
+        to: 'UNICODE',
+        type: 'string',
+    });
+};
 
 module.exports = router;
