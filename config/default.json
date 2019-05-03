@@ -12,7 +12,7 @@
         {
             "id": "launchNotepad",
             "name": "メモ帳起動",
-            "command": "notepad.exe",
+            "command": "start notepad.exe",
             "descript": "メモ帳を起動します。\r\n所要時間：1秒"
         }
     ]
