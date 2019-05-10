@@ -4,7 +4,7 @@ const config = require('config');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { programs: config.programs});
+  res.render('index', { displayName: config.displayName, programs: config.programs});
 });
 
 module.exports = router;
