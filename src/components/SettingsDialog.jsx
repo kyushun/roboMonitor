@@ -19,6 +19,12 @@ const styles = {
         fontSize: '1.5rem',
         fontWeight: '900'
     },
+    version: {
+        paddingLeft: '10px',
+        color: '#999',
+        fontSize: '.75rem',
+        verticalAlign: 'middle'
+    },
     section: {
         display: 'flex'
     },
@@ -85,6 +91,7 @@ class SettingsDialog extends React.Component {
             >
                 <DialogTitle>
                     <span className={classes.title}>設定</span>
+                    <span className={classes.version}>Ver. {rbMonitor.version}</span>
                 </DialogTitle>
                 <DialogContent>
                     <div className={classes.section}>
