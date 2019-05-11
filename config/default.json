@@ -1,20 +1,5 @@
 {
     "displayName": "デバッグ機",
     "processName": "notepad",
-    "adminKey": "0629",
-    "programs": [
-        {
-            "id": "restart",
-            "name": "再起動",
-            "command": "shutdown -r -f -t 10 -c \"シャットダウンコマンドが実行されました。間もなく再起動します。\"",
-            "descript": "PCを再起動します。\r\n強制的にすべてのプログラムを終了させるので実行中のプログラムがないか確認してください。",
-            "allowForceExec": true
-        },
-        {
-            "id": "launchNotepad",
-            "name": "メモ帳起動",
-            "command": "start notepad.exe",
-            "descript": "メモ帳を起動します。\r\n所要時間：1秒"
-        }
-    ]
+    "adminKey": "0629"
 }

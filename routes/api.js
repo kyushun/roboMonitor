@@ -4,6 +4,8 @@ const screenshot = require('screenshot-desktop');
 const config = require('config');
 const exec = require('child_process').exec;
 const Encoding = require('encoding-japanese');
+const CsvParser = require('../lib/csv-parser');
+const PROGRAMS_LIST = './config/programs.csv';
 
 /* ScreenShot API */
 router.get('/ss', function (req, res, next) {
@@ -40,15 +42,17 @@ router.get('/robo/status', async function (req, res, next) {
 
 /* Robopat Start API */
 router.get('/robo/start/:id', async function (req, res, next) {
+    const programs = CsvParser.parse();
+
     var id = null;
-    for (let i = 0; i < config.programs.length; i++) {
-        if (req.params.id == config.programs[i].id) {
+    for (let i = 0; i < programs.length; i++) {
+        if (req.params.id == programs[i].id) {
             id = i;
         }
     }
 
     if (id != null) {
-        await execEx(config.programs[id].command)
+        await execEx(programs[id].command)
             .then((stdout) => {
                 res.status(200).json({
                     status: 200
@@ -115,7 +119,7 @@ const execEx = (command) => {
                 resolve(toString(stdout));
             }
         });
-    });    
+    });
 }
 
 const toString = (bytes) => {
