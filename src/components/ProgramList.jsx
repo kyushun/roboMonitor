@@ -124,7 +124,7 @@ class ProgramExecDialog extends React.Component {
                 <DialogTitle id="alert-dialog-title">{rbMonitor.programs[Number(this.props.idx)].name}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        {rbMonitor.programs[Number(this.props.idx)].descript.split(/\n|\r\n|\r/).map(s => {
+                        {rbMonitor.programs[Number(this.props.idx)].descript.split(/\\n|\\r\\n|\\r/).map(s => {
                             return (
                                 <span key={s}>{s}<br /></span>
                             );
