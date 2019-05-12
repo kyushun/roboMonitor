@@ -112,7 +112,7 @@ router.get('/ping', function (req, res, next) {
 
 const execEx = (command) => {
     return new Promise((resolve, reject) => {
-        exec(command, { encoding: 'Shift_JIS' }, (err, stdout, stderr) => {
+        exec(commandNormalize(command), { encoding: 'Shift_JIS' }, (err, stdout, stderr) => {
             if (err) {
                 reject(err.message);
             } else if (toString(stderr)) {
@@ -122,6 +122,16 @@ const execEx = (command) => {
             }
         });
     });
+}
+
+const commandNormalize = (command) => {
+    var trimedCmd = command.trim();
+    var regex = new RegExp(/^"([^"]+?).exe"|^(\S+?).exe/);
+    if (regex.test(trimedCmd)) {
+        return 'START "" ' + trimedCmd;
+    } else {
+        return trimedCmd;
+    }
 }
 
 const toString = (bytes) => {
