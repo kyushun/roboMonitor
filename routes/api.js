@@ -44,15 +44,17 @@ router.get('/robo/status', async function (req, res, next) {
 router.get('/robo/start/:id', async function (req, res, next) {
     const programs = CsvParser.parse();
 
-    var id = null;
-    for (let i = 0; i < programs.length; i++) {
-        if (req.params.id == programs[i].id) {
-            id = i;
+    const task = (() => {
+        for (const genre of Object.values(programs)) {
+            for (const task of genre) {
+                if (req.params.id == task.name) return task;
+            }
         }
-    }
+        return null;
+    })();
 
-    if (id != null) {
-        await execEx(programs[id].command)
+    if (task != null) {
+        await execEx(task.command)
             .then((stdout) => {
                 res.status(200).json({
                     status: 200
