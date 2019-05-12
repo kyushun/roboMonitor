@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { inject, observer } from 'mobx-react';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -32,8 +33,17 @@ const styles = {
         flexGrow: '1',
         minWidth: '200px'
     },
-    sectionForm: {
-
+    divider: {
+        margin: '1rem 0'
+    },
+    input: {
+        display: 'none'
+    },
+    taskForm: {
+        marginBottom: '1rem'
+    },
+    button: {
+        margin: '0 .25rem'
     }
 };
 
@@ -78,6 +88,36 @@ class SettingsDialog extends React.Component {
 
     handleValueChange = (name, e) => {
         this.setState({ [name]: e.target.value });
+    }
+
+    handleCsvSelected = (e) => {
+        var params = new FormData();
+        params.append('file', e.target.files[0]);
+        axios.post('/api/system/tasklist', params)
+            .then(function (response) {
+                alert('タスクリストを更新しました');
+                location.reload();
+            })
+            .catch(function (error) {
+                console.log(error);
+                alert('エラーが発生しました\r\n' + error);
+            });
+    }
+
+    handleCsvRestore = () => {
+        axios.post('/api/system/tasklist/restore')
+            .then(() => {
+                alert('タスクリストを復元しました');
+                location.reload();
+            })
+            .catch((error) => {
+                console.log(error.response);
+                if (error.response.status == 400) {
+                    alert('【エラー】復元可能なバックアップファイルが見つかりませんでした');
+                } else {
+                    alert('【エラー】復元に失敗しました\r\n' + error.response);
+                }
+            });
     }
 
     render() {
@@ -132,7 +172,28 @@ class SettingsDialog extends React.Component {
                         if (this.props.settings.authorized) {
                             return (
                                 <div>
-                                    <Divider />
+                                    <Divider className={classes.divider} />
+                                    <div className={classes.section}>
+                                        <div className={classes.sectionSummary}><Typography>タスクリスト更新</Typography></div>
+                                        <div className={`${classes.sectionForm} ${classes.taskForm}`}>
+                                            <input
+                                                accept="text/csv"
+                                                className={classes.input}
+                                                id="outlined-button-file"
+                                                multiple
+                                                type="file"
+                                                onChange={this.handleCsvSelected.bind(this)}
+                                            />
+                                            <label htmlFor="outlined-button-file">
+                                                <Button variant="outlined" color="primary" component="span" className={classes.button}>
+                                                    アップロード
+                                                </Button>
+                                            </label>
+                                            <Button variant="outlined" color="secondary" component="span" className={classes.button} onClick={this.handleCsvRestore}>
+                                                復元
+                                            </Button>
+                                        </div>
+                                    </div>
                                     <div className={classes.section}>
                                         <div className={classes.sectionSummary}><Typography>SS取得間隔 (ms)</Typography></div>
                                         <div className={classes.sectionForm}>
@@ -171,7 +232,7 @@ class SettingsDialog extends React.Component {
                     })()}
                 </DialogContent>
                 <DialogActions>
-                    <Button color="secondary" style={{marginRight: 'auto'}} onClick={e => {this.props.settings.reset()}}>
+                    <Button color="secondary" style={{ marginRight: 'auto' }} onClick={e => { this.props.settings.reset() }}>
                         設定をリセット
                     </Button>
                     <Button onClick={this.handleSave} color="primary" autoFocus>

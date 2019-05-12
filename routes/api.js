@@ -1,3 +1,4 @@
+const fs = require('fs');
 var express = require('express');
 var router = express.Router();
 const screenshot = require('screenshot-desktop');
@@ -5,7 +6,7 @@ const config = require('config');
 const exec = require('child_process').exec;
 const Encoding = require('encoding-japanese');
 const CsvParser = require('../lib/csv-parser');
-const PROGRAMS_LIST = './config/programs.csv';
+const multer = require('multer');
 
 /* ScreenShot API */
 router.get('/ss', function (req, res, next) {
@@ -103,6 +104,49 @@ router.post('/auth', function (req, res, next) {
     }
 });
 
+router.post('/system/tasklist', multer({ dest: './config' }).single('file'), (req, res) => {
+    if (!req.file.originalname.endsWith('.csv')) {
+        res.status(400).send('wrong file');
+        return;
+    }
+
+    const filename = './config/programs.csv';
+
+    console.log();
+
+    fs.rename(filename, filename + '.bk', function (err) {
+        if (err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            fs.rename(req.file.path, filename, function (err) {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                } else {
+                    res.send('ok');
+                }
+            });
+        }
+    });
+});
+
+router.post('/system/tasklist/restore', function (req, res, next) {
+    const filename = './config/programs.csv';
+
+    fs.rename(filename + '.bk', filename, function (err) {
+        if (err) {
+            console.log(err);
+            if (err.code === "ENOENT") {
+                res.status(400).send(err);
+            } else {
+                res.status(500).send(err);
+            }
+        } else {
+            res.send('ok');
+        }
+    });
+});
 
 router.get('/ping', function (req, res, next) {
     res.json({
