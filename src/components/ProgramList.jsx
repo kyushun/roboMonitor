@@ -72,8 +72,8 @@ class ProgramList extends React.Component {
                 <List component="nav">
                     {rbMonitor.programs.map((p, idx) => {
                         return (
-                            <ListItem button key={p.id}>
-                                <ListItemText onClick={this.openDialog.bind(this, idx)} primary={p.name} />
+                            <ListItem button key={p.id} onClick={this.openDialog.bind(this, idx)}>
+                                <ListItemText primary={p.name} />
                             </ListItem>
                         );
                     })}
