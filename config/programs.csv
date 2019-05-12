@@ -15,6 +15,7 @@
 ,原価管理表更新対象抽出,原価管理表更新対象抽出をします。,"""C:\Program Files\robopat\RoboPatIDE.exe"" -l -t ""main"" -e ""C:\Robopat\RobopatScript\2_経理ロボット\経2_02_売上原価管理表の更新対象貼り付け\経2_02_売上原価管理表の更新対象貼り付けVer3.bwn""",0
 @管理者専用,,,,
 ,【必読】管理者用タスクの説明,管理者専用タスクは他のタスクやコンピュータ自身に影響を与える可能性があります。\r\n管理者より指示があった場合のみ実行してください。,,
+,タスクリストの更新方法,https://docs.google.com/spreadsheets/d/1baW6kfLF952nLgSLAMLBiP3t-IZ_wIqTfRVpP2TkkZU/edit#gid=2022714609\r\n上記シートをCSVで書き出し、設定画面よりインポートしてください。,,
 ,画面掃除ロボ,画面を掃除します。,"""C:\Program Files\robopat\RoboPatIDE.exe"" -l -t ""main"" -e ""C:\Robopat\RobopatScript\1_管理ロボット\管1_02_Robopat画面掃除\管1_02_Robopat画面掃除.bwn""",1
 ,強制再起動,ロボが稼働しているPCを、強制的に再起動します。所要30秒程度,"shutdown -r -f -t 10 -c ""シャットダウンコマンドが実行されました。間もなく再起動します。""",1
 ,メモ帳起動,これはデバッグ用コマンドです。,notepad.exe,1

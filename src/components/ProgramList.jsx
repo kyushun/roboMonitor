@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Linkify from 'react-linkify'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -195,7 +196,9 @@ class ProgramExecDialog extends React.Component {
                                 return (
                                     this.state.task.descript.split(/\\n|\\r\\n|\\r/).map(s => {
                                         return (
-                                            <span key={s}>{s}<br /></span>
+                                            <Linkify properties={{ target: '_blank', style: { color: '#3366BB', fontSize: '.75em', fontWeight: 'bold' } }}>
+                                                <span key={s}>{s}<br /></span>
+                                            </Linkify>
                                         );
                                     })
                                 );
