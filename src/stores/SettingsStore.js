@@ -11,15 +11,19 @@ export default class SettingsStore {
     @observable statusFetchInterval = 2000;
     @observable authKey = null;
     @observable authorized = false;
+    @observable openedTabs = [];
 
     constructor() {
         const _store = store.get(STORE_KEY);
         if (_store) {
             Object.keys(_store).forEach(function (key) {
-                const v = typeof (_store[key]) == 'string' ? `"${_store[key]}"` : _store[key];
+                const v = this.getValueForEval(_store[key]);
                 eval(`this.${key} = ${v}`);
             }, this);
+        } else {
+            this.openedTabs[0] = true;
         }
+
         if (this.authKey) {
             axios.post('/api/auth', { key: this.authKey })
                 .then(result => { this.authorized = true; })
@@ -46,7 +50,17 @@ export default class SettingsStore {
         const _s = store.get(STORE_KEY) ? store.get(STORE_KEY) : {};
         _s[key] = value;
         store.set(STORE_KEY, _s);
-        const _v = typeof (value) == 'string' ? `"${value}"` : value;
+        const _v = this.getValueForEval(value);
         eval(`this.${key} = ${_v}`);
+    }
+
+    getValueForEval(value) {
+        if (typeof (value) == 'string') {
+            return `"${value}"`;
+        } else if (value != null && typeof (value) == 'object') {
+            return JSON.stringify(value);
+        } else {
+            return value;
+        }
     }
 }

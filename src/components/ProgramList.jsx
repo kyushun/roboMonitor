@@ -36,19 +36,12 @@ const styles = {
     }
 };
 
-@inject('store')
+@inject('store', 'settings')
 @observer
 class ProgramList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            collapseOpen: (() => {
-                var _collapseOpen = [];
-                for (let i = 0; i < Object.keys(rbMonitor.programs).length; i++) {
-                    _collapseOpen[i] = false;
-                }
-                return _collapseOpen;
-            })(),
             dialogOpen: false,
             selectedTaskName: null,
             resultSnackOpen: false,
@@ -57,11 +50,9 @@ class ProgramList extends React.Component {
     }
 
     handleCollapseSwitch(idx) {
-        var _collapseOpen = this.state.collapseOpen;
-        _collapseOpen[idx] = !_collapseOpen[idx];
-        this.setState({
-            collapseOpen: _collapseOpen
-        });
+        var _tabs = this.props.settings.openedTabs.slice();
+        _tabs[idx] = !this.props.settings.openedTabs.slice()[idx];
+        this.props.settings.set('openedTabs', _tabs)
     }
 
     openDialog(taskName) {
@@ -109,9 +100,9 @@ class ProgramList extends React.Component {
                             <React.Fragment key={genre}>
                                 <ListItem button onClick={this.handleCollapseSwitch.bind(this, idx)}>
                                     <ListItemText primary={genre} />
-                                    {this.state.collapseOpen[idx] ? <ExpandLess /> : <ExpandMore />}
+                                    {this.props.settings.openedTabs.slice()[idx] ? <ExpandLess /> : <ExpandMore />}
                                 </ListItem>
-                                <Collapse in={this.state.collapseOpen[idx]} timeout="auto" unmountOnExit>
+                                <Collapse in={this.props.settings.openedTabs.slice()[idx]} timeout="auto" unmountOnExit>
                                     <List component="div" disablePadding>
                                         {rbMonitor.programs[genre].map((task, jdx) => {
                                             return (
