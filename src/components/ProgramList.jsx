@@ -99,7 +99,8 @@ class ProgramList extends React.Component {
                 <CardContent>
                     <Typography className={classes.cardTitle} variant="h6" component="h2">タスクを実行</Typography>
                     <Typography color="textSecondary">
-                        プログラムを指定すると今すぐにタスクが実行されます
+                        今すぐ実行したいロボの名前をクリックしてください。<br />
+                        ※別の作業を実行中（使用中）の場合は、「実行」が押せません。
                     </Typography>
                 </CardContent>
                 <List component="nav">
@@ -188,7 +189,7 @@ class ProgramExecDialog extends React.Component {
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >
-                <DialogTitle id="alert-dialog-title" disableTypography={true} style={{fontSize: '1.3rem', fontWeight: '700'}}>{this.state.task ? this.state.task.name : null}</DialogTitle>
+                <DialogTitle id="alert-dialog-title" disableTypography={true} style={{ fontSize: '1.3rem', fontWeight: '700' }}>{this.state.task ? this.state.task.name : null}</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
                         {(() => {
@@ -214,13 +215,29 @@ class ProgramExecDialog extends React.Component {
                                     <Button onClick={this.props.handleClose} color="primary">
                                         キャンセル
                                     </Button>
-                                    <Button
-                                        onClick={this.handleExec}
-                                        color="primary"
-                                        autoFocus
-                                        disabled={(this.state.task && !this.state.task.allowForceExec) && (this.state.loading || !this.props.executable)}>
-                                        実行
-                                    </Button>
+                                    {(() => {
+                                        if ((this.state.task && !this.state.task.allowForceExec) && (this.state.loading || !this.props.executable)) {
+                                            return (
+                                                <Button
+                                                    onClick={this.handleExec}
+                                                    color="primary"
+                                                    autoFocus
+                                                    disabled={true}>
+                                                    使用中のため実行不可
+                                                </Button>
+                                            );
+                                        } else {
+                                            return (
+                                                <Button
+                                                    onClick={this.handleExec}
+                                                    color="primary"
+                                                    autoFocus
+                                                    disabled={false}>
+                                                    実行
+                                                </Button>
+                                            );
+                                        }
+                                    })()}
                                 </>
                             );
                         } else {
