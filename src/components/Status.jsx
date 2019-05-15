@@ -61,7 +61,7 @@ class Status extends React.Component {
     }
 
     fetchStatus = () => {
-        axios.get('/api/robo/status')
+        axios.get('/api/robo/status', { timeout : this.props.settings.statusFetchInterval + 500 })
             .then(result => {
                 this.props.store.setRoboStatus(result.data.processName);
             })
