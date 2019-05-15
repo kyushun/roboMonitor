@@ -109,25 +109,22 @@ router.post('/system/tasklist', multer({ dest: './config' }).single('file'), (re
         res.status(400).send('wrong file');
         return;
     }
-
+    
     const filename = './config/programs.csv';
-
-    console.log();
-
     fs.rename(filename, filename + '.bk', function (err) {
-        if (err) {
+        if (err && err.code !== 'ENOENT') {
             console.log(err);
             res.status(500).send(err);
-        } else {
-            fs.rename(req.file.path, filename, function (err) {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send(err);
-                } else {
-                    res.send('ok');
-                }
-            });
+            return;
         }
+        fs.rename(req.file.path, filename, function (err) {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            } else {
+                res.send('ok');
+            }
+        });
     });
 });
 
