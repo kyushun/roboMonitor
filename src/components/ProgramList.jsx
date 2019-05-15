@@ -121,7 +121,7 @@ class ProgramList extends React.Component {
                 </List>
                 <ProgramExecDialog
                     open={this.state.dialogOpen}
-                    executable={!this.props.store.isRunning}
+                    executable={this.props.store.executable}
                     taskName={this.state.selectedTaskName}
                     handleResultOpen={this.handleExecResultOpen}
                     handleClose={this.closeDialog.bind(this)} />
@@ -131,6 +131,8 @@ class ProgramList extends React.Component {
     }
 }
 
+@inject('store', 'settings')
+@observer
 class ProgramExecDialog extends React.Component {
     constructor(props) {
         super(props);
@@ -207,14 +209,14 @@ class ProgramExecDialog extends React.Component {
                                         キャンセル
                                     </Button>
                                     {(() => {
-                                        if ((this.state.task && !this.state.task.allowForceExec) && (this.state.loading || !this.props.executable)) {
+                                        if (!this.state.loading && this.props.store.connected && (this.props.executable || (this.state.task && this.state.task.allowForceExec))) {
                                             return (
                                                 <Button
                                                     onClick={this.handleExec}
                                                     color="primary"
                                                     autoFocus
-                                                    disabled={true}>
-                                                    使用中のため実行不可
+                                                    disabled={false}>
+                                                    実行
                                                 </Button>
                                             );
                                         } else {
@@ -223,8 +225,8 @@ class ProgramExecDialog extends React.Component {
                                                     onClick={this.handleExec}
                                                     color="primary"
                                                     autoFocus
-                                                    disabled={false}>
-                                                    実行
+                                                    disabled={true}>
+                                                    使用中のため実行不可
                                                 </Button>
                                             );
                                         }

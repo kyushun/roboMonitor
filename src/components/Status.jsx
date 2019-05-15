@@ -64,13 +64,18 @@ class Status extends React.Component {
         axios.get('/api/robo/status')
             .then(result => {
                 this.props.store.setRoboStatus(result.data.processName);
+            })
+            .catch(err => {
+                this.props.store.connected = false;
             });
     }
 
     render() {
         const { classes } = this.props;
 
-        if (this.props.store.isRunning) {
+        if (!this.props.store.connected) {
+            return <Typography className={classes.statusSummary}>接続中...</Typography>
+        } else if (!this.props.store.executable) {
             return (
                 <div>
                     <Typography className={classes.statusSummary}>使用中</Typography>

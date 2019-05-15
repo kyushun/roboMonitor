@@ -8,15 +8,17 @@ const defaultSettings = {
 };
 
 export default class MonitorStore {
+    @observable connected = false;
     @observable runningProcess = [];
     @observable programList = [];
 
-    @computed get isRunning() {
-        return (this.runningProcess != null && this.runningProcess.length > 0);
+    @computed get executable() {
+        return (this.connected && (this.runningProcess == null || this.runningProcess.length <= 0));
     }
-
+    
     @action
     setRoboStatus(runningName) {
+        this.connected = true;
         this.runningProcess = runningName;
     }
 }
