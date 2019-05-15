@@ -163,7 +163,7 @@ class SettingsDialog extends React.Component {
                                 autoComplete="current-password"
                                 margin="normal"
                                 variant="outlined"
-                                value={this.state.authKey}
+                                value={this.state.authKey || ''}
                                 onChange={this.handleValueChange.bind(this, 'authKey')}
                             />
                         </div>
@@ -205,7 +205,7 @@ class SettingsDialog extends React.Component {
                                                 }}
                                                 margin="normal"
                                                 variant="outlined"
-                                                value={this.state.ssFetchInterval}
+                                                value={this.state.ssFetchInterval || 2000}
                                                 onChange={this.handleValueChange.bind(this, 'ssFetchInterval')}
                                             />
                                         </div>
@@ -221,7 +221,7 @@ class SettingsDialog extends React.Component {
                                                 }}
                                                 margin="normal"
                                                 variant="outlined"
-                                                value={this.state.statusFetchInterval}
+                                                value={this.state.statusFetchInterval || 2000}
                                                 onChange={this.handleValueChange.bind(this, 'statusFetchInterval')}
                                             />
                                         </div>
