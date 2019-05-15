@@ -188,9 +188,9 @@ class ProgramExecDialog extends React.Component {
                         {(() => {
                             if (this.state.task) {
                                 return (
-                                    this.state.task.descript.split(/\\n|\\r\\n|\\r/).map(s => {
+                                    this.state.task.descript.split(/\\n|\\r\\n|\\r/).map((s, idx) => {
                                         return (
-                                            <Linkify properties={{ target: '_blank', style: { color: '#3366BB', fontSize: '.75em', fontWeight: 'bold' } }}>
+                                            <Linkify key={s + idx} properties={{ target: '_blank', style: { color: '#3366BB', fontSize: '.75em', fontWeight: 'bold' } }}>
                                                 <span key={s}>{s}<br /></span>
                                             </Linkify>
                                         );
