@@ -3,6 +3,7 @@
   "version": "1.2.6",
   "private": true,
   "scripts": {
+    "init": "npm install && npm run prod-build",
     "start": "node ./bin/www",
     "watch": "webpack --progress --watch",
     "dev-build": "webpack --mode development",
