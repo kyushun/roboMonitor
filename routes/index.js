@@ -5,8 +5,8 @@ const CsvParser = require('../lib/csv-parser');
 const PROGRAMS_LIST = './config/programs.csv';
 
 /* GET home page. */
-router.get('/', function (req, res, next) {
-  const programs = CsvParser.parse();
+router.get('/', async function (req, res, next) {
+  const programs = await CsvParser.parse();
   res.render('index', { displayName: config.displayName, programs });
 });
 

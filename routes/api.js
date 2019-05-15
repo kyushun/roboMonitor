@@ -43,7 +43,7 @@ router.get('/robo/status', async function (req, res, next) {
 
 /* Robopat Start API */
 router.get('/robo/start/:id', async function (req, res, next) {
-    const programs = CsvParser.parse();
+    const programs = await CsvParser.parse();
 
     const task = (() => {
         for (const genre of Object.values(programs)) {
