@@ -7,6 +7,7 @@ const exec = require('child_process').exec;
 const Encoding = require('encoding-japanese');
 const CsvParser = require('../lib/csv-parser');
 const multer = require('multer');
+const { promisify } = require('util');
 
 /* ScreenShot API */
 router.get('/ss', function (req, res, next) {
@@ -55,6 +56,13 @@ router.get('/robo/start/:id', async function (req, res, next) {
     })();
 
     if (task != null) {
+        const baseLogDir = './cache/';
+        fs.writeFile(baseLogDir + `${req.params.id}.last`, (() => {
+            var dt = new Date();
+            return dt.toString();
+        })(), err => {
+            if (err) console.log(err);
+        });
         await execEx(task.command)
             .then((stdout) => {
                 res.status(200).json({
@@ -104,12 +112,24 @@ router.post('/auth', function (req, res, next) {
     }
 });
 
+router.get('/system/tasklist/lastupdate', async function (req, res, next) {
+    const baseDir = './cache/';
+    const filelist = (await promisify(fs.readdir)(baseDir)).filter(v => { return v.match(/.+?.last$/); });
+    var list = {};
+    for (const filename of filelist) {
+        try {
+            list[filename.split(/\.(?=[^.]+$)/)[0]] = await promisify(fs.readFile)(baseDir + filename, 'utf8')
+        } catch (e) {}
+    }
+    res.json(list);
+});
+
 router.post('/system/tasklist', multer({ dest: './config' }).single('file'), (req, res) => {
     if (!req.file.originalname.endsWith('.csv')) {
         res.status(400).send('wrong file');
         return;
     }
-    
+
     const filename = './config/programs.csv';
     fs.rename(filename, filename + '.bk', function (err) {
         if (err && err.code !== 'ENOENT') {

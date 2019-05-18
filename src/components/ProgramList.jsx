@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import Linkify from 'react-linkify'
 import { withStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
@@ -45,8 +46,32 @@ class ProgramList extends React.Component {
             dialogOpen: false,
             selectedTaskName: null,
             resultSnackOpen: false,
-            resultSnackMsg: ''
+            resultSnackMsg: '',
+            lastUpdates: {}
         };
+    }
+
+    componentDidMount = () => {
+        this.fetchLastUpdates();
+        if (this.props.settings.autoFetch) {
+            this.fetchInterval = setInterval(() => {
+                this.fetchLastUpdates();
+            }, 60 * 1000);
+        }
+    }
+    
+    fetchLastUpdates = () => {
+        axios.get('/api/system/tasklist/lastupdate')
+            .then(result => {
+                if (Object.prototype.toString.call(result.data) === '[object Object]') {
+                    this.setState({
+                        lastUpdates: result.data
+                    });
+                }
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     handleCollapseSwitch(idx) {
@@ -107,7 +132,24 @@ class ProgramList extends React.Component {
                                         {rbMonitor.programs[genre].map((task, jdx) => {
                                             return (
                                                 <ListItem key={task.name} button onClick={this.openDialog.bind(this, task.name)} className={classes.nestedList}>
-                                                    <ListItemText primary={task.name} />
+                                                    <ListItemText primary={task.name}  secondary={(() => {
+                                                        if (task.name in this.state.lastUpdates) {
+                                                            const lu = moment(this.state.lastUpdates[task.name]);
+                                                            const td = moment();
+
+                                                            if (td.diff(lu, 'months') > 0) {
+                                                                return td.diff(lu, 'months') + 'ヶ月前';
+                                                            } else if (td.diff(lu, 'days') > 0) {
+                                                                return td.diff(lu, 'days') + '日前';
+                                                            } else if (td.diff(lu, 'hours') > 0) {
+                                                                return td.diff(lu, 'hours') + '時間前';
+                                                            } else {
+                                                                return td.diff(lu, 'minutes') + '分前';
+                                                            }
+                                                        } else {
+                                                            return '';
+                                                        }
+                                                    })()} />
                                                 </ListItem>
                                             );
                                         })
