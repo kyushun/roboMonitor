@@ -7,6 +7,7 @@ const STORE_KEY = 'settings';
 export default class SettingsStore {
     @observable isDarkTheme = false;
     @observable autoFetch = true;
+    @observable onTaskDetailView = false;
     @observable ssFetchInterval = 5000;
     @observable statusFetchInterval = 2000;
     @observable authKey = null;

@@ -55,6 +55,7 @@ class SettingsDialog extends React.Component {
         this.state = {
             isDarkTheme: this.props.settings.isDarkTheme,
             autoFetch: this.props.settings.autoFetch,
+            onTaskDetailView: this.props.settings.onTaskDetailView,
             ssFetchInterval: this.props.settings.ssFetchInterval,
             statusFetchInterval: this.props.settings.statusFetchInterval,
             authKey: this.props.settings.authKey
@@ -75,6 +76,7 @@ class SettingsDialog extends React.Component {
         this.setState({
             isDarkTheme: this.props.settings.isDarkTheme,
             autoFetch: this.props.settings.autoFetch,
+            onTaskDetailView: this.props.settings.onTaskDetailView,
             ssFetchInterval: this.props.settings.ssFetchInterval,
             statusFetchInterval: this.props.settings.statusFetchInterval,
             authKey: this.props.settings.authKey
@@ -151,6 +153,16 @@ class SettingsDialog extends React.Component {
                                 checked={this.state.autoFetch}
                                 color="primary"
                                 onChange={this.handleSwitchChange.bind(this, 'autoFetch')}
+                            />
+                        </div>
+                    </div>
+                    <div className={classes.section}>
+                        <div className={classes.sectionSummary}><Typography>一覧にタスクの詳細を表示</Typography></div>
+                        <div className={classes.sectionForm}>
+                            <Switch
+                                checked={this.state.onTaskDetailView}
+                                color="primary"
+                                onChange={this.handleSwitchChange.bind(this, 'onTaskDetailView')}
                             />
                         </div>
                     </div>
