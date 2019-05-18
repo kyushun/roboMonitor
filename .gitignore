@@ -94,5 +94,8 @@ config/programs.csv*
 config/development.json
 config/production.json
 
+# Temporary Files
+cache/*
+
 # Git Keep
 !.gitkeep
