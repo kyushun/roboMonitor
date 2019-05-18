@@ -44,6 +44,11 @@ const styles = theme => ({
         '&+ &': {
             borderTop: 'solid 1px rgba(0, 0, 0, 0.12)'
         }
+    },
+    statusBadge: {
+        fontSize: '.75em',
+        paddingRight: '.5rem',
+        verticalAlign: 'bottom'
     }
 });
 
@@ -61,7 +66,7 @@ class Status extends React.Component {
     }
 
     fetchStatus = () => {
-        axios.get('/api/robo/status', { timeout : this.props.settings.statusFetchInterval + 500 })
+        axios.get('/api/robo/status', { timeout: this.props.settings.statusFetchInterval + 500 })
             .then(result => {
                 this.props.store.setRoboStatus(result.data.processName);
             })
@@ -74,11 +79,11 @@ class Status extends React.Component {
         const { classes } = this.props;
 
         if (!this.props.store.connected) {
-            return <Typography className={classes.statusSummary}>接続中...</Typography>
+            return <Typography className={classes.statusSummary}><span className={classes.statusBadge} style={{ color: '#ff9800' }}>●</span>接続中...</Typography>
         } else if (!this.props.store.executable) {
             return (
                 <div>
-                    <Typography className={classes.statusSummary}>使用中</Typography>
+                    <Typography className={classes.statusSummary}><span className={classes.statusBadge} style={{ color: '#f44336' }}>●</span>使用中</Typography>
                     <div className={classes.statusDetail}>
                         {this.props.store.runningProcess.map(p => (
                             <div className={classes.statusDetailItem} key={p.startTime}>{(() => {
@@ -90,7 +95,7 @@ class Status extends React.Component {
                 </div>
             );
         } else {
-            return <Typography className={classes.statusSummary}>使用可能</Typography>
+            return <Typography className={classes.statusSummary}><span className={classes.statusBadge} style={{ color: '#4caf50' }}>●</span>使用可能</Typography>
         }
     }
 }
