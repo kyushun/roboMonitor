@@ -291,7 +291,7 @@ class ProgramExecDialog extends React.Component {
                                                     color="primary"
                                                     autoFocus
                                                     disabled={true}>
-                                                    使用中のため実行不可
+                                                    {this.props.store.connected ? '使用中' : '接続中'}のため実行不可
                                                 </Button>
                                             );
                                         }
