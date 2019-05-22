@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import moment from 'moment';
 import Paper from '@material-ui/core/Paper';
 import Divider from '@material-ui/core/Divider';
 import { withStyles } from '@material-ui/core/styles';
@@ -49,6 +50,16 @@ const styles = theme => ({
         fontSize: '.75em',
         paddingRight: '.5rem',
         verticalAlign: 'bottom'
+    },
+    infiniteLoopWarning: {
+        display: 'inline-block',
+        marginLeft: '.5rem',
+        padding: '0 .5rem',
+        fontSize: '.75rem',
+        color: '#e65100',
+        border: 'solid 1px #e65100',
+        borderRadius: '4px',
+        verticalAlign: 'middle'
     }
 });
 
@@ -86,10 +97,18 @@ class Status extends React.Component {
                     <Typography className={classes.statusSummary}><span className={classes.statusBadge} style={{ color: '#f44336' }}>●</span>使用中</Typography>
                     <div className={classes.statusDetail}>
                         {this.props.store.runningProcess.map(p => (
-                            <div className={classes.statusDetailItem} key={p.startTime}>{(() => {
-                                let date = new Date(p.startTime);
-                                return ('0' + (date.getHours())).slice(-2) + ':' + ('0' + (date.getMinutes())).slice(-2) + ':' + ('0' + (date.getSeconds())).slice(-2);
-                            })()} - {p.windowTitle}</div>
+                            <div className={classes.statusDetailItem} key={p.startTime}>
+                                <span style={{ verticalAlign: 'middle' }}>{(() => {
+                                    let date = new Date(p.startTime);
+                                    return ('0' + (date.getHours())).slice(-2) + ':' + ('0' + (date.getMinutes())).slice(-2) + ':' + ('0' + (date.getSeconds())).slice(-2);
+                                })()} - {p.windowTitle}</span>
+                                {(() => {
+                                    const diff = moment().diff(moment(p.startTime), 'minutes');
+                                    if (rbMonitor.processWarningTime != null && diff >= rbMonitor.processWarningTime) {
+                                        return <span className={classes.infiniteLoopWarning}>{diff}分経過：タスクが正常に終了していない可能性があります</span>;
+                                    }
+                                })()}
+                            </div>
                         ))}
                     </div>
                 </div>
