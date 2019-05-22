@@ -7,7 +7,7 @@ const PROGRAMS_LIST = './config/programs.csv';
 /* GET home page. */
 router.get('/', async function (req, res, next) {
   const programs = await CsvParser.parse();
-  res.render('index', { displayName: config.displayName, programs });
+  res.render('index', { config, programs });
 });
 
 module.exports = router;
